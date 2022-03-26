@@ -4,6 +4,53 @@ from datetime import datetime
 
 from pydantic.networks import EmailStr
 
+class CourseGet(BaseModel):
+    id: int
+    course_id: str
+    course_name: str
+    course_credits: str
+    sem_offered: str
+    is_bs: bool
+    is_hs: bool
+
+    class Config:
+        orm_mode = True
+
+class ProgramGet(BaseModel):
+    id: int
+    major_code: str
+    core_creds: int
+    ext_core_creds: int
+    bs_creds: int
+    hs_creds: int
+    open_creds: int
+
+    class Config:
+        orm_mode = True
+
+class MinorGet(BaseModel):
+    id: int
+    minor_code: str
+
+    class Config:
+        orm_mode = True
+
+class CoreRelGet(BaseModel):
+    id: int
+    course_id: int
+    major_id: int
+
+    class Config:
+        orm_mode = True
+
+class ExtCoreRelGet(BaseModel):
+    id: int
+    course_id: int
+    major_id: int
+
+    class Config:
+        orm_mode = True
+
 class SelectedCourseDelete(BaseModel):
     course_id: str
 

@@ -9,7 +9,7 @@ from sqlalchemy.sql.functions import mode
 from . import models, schemas, utils
 from sqlalchemy.orm import Session
 from .database import engine, get_db
-from .routers import user, auth, select_courses
+from .routers import user, auth, select_courses, advisory
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -28,6 +28,7 @@ while True:
 app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(select_courses.router)
+app.include_router(advisory.router)
 
 @app.get('/')
 async def root():

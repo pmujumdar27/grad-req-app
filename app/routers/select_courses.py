@@ -1,4 +1,3 @@
-from msilib import schema
 from fastapi import Response, status, HTTPException, Depends, APIRouter
 
 from app.database import get_db
@@ -32,6 +31,9 @@ async def create_selected_course(selected_course: schemas.SelectedCourseCreate, 
         raise HTTPException(status.HTTP_406_NOT_ACCEPTABLE, detail=f"Course Already Selected")
 
     try:
+        # check if selected course can be counted towards whatever is entered
+        # Validation Not written yet
+
         db.add(new_selected_course)
         db.commit()
         db.refresh(new_selected_course)
