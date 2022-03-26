@@ -47,6 +47,14 @@ async def create_selected_course(selected_course: schemas.SelectedCourseCreate, 
     except:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Invalid Request")
 
-# @router.delete('/', status_code=status.HTTP_204_NO_CONTENT)
-# async def delete_selected_course(selected_course: schemas.SelectedCourseDelete, response: Response, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-#     sc = db.query(models.SelectedCourse).filter(models.SelectedCourse.course_id = selected_course.course_id).filter()
+@router.delete('/', status_code=status.HTTP_204_NO_CONTENT)
+async def delete_selected_course(selected_course: schemas.SelectedCourseDelete, response: Response, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    sc = db.query(models.SelectedCourse).filter(models.SelectedCourse.user_id == current_user.id).filter(models.SelectedCourse.course_id == selected_course.course_id)
+
+    if sc.first()==None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND,
+         detail=f"Course Entry Not Found")
+
+    sc.delete(synchronize_session=False)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
