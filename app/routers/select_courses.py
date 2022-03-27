@@ -25,6 +25,7 @@ async def get_selected_courses(db: Session = Depends(get_db), current_user: int 
 async def create_selected_course(selected_course: schemas.SelectedCourseCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
     # print(selected_course.dict())
     new_selected_course = models.SelectedCourse(**selected_course.dict())
+    new_selected_course.user_id = current_user.id
 
     check_already = db.query(models.SelectedCourse).filter(models.SelectedCourse.user_id == new_selected_course.user_id).filter(models.SelectedCourse.course_id == new_selected_course.course_id).all()
     if(len(check_already) > 0):
@@ -33,6 +34,16 @@ async def create_selected_course(selected_course: schemas.SelectedCourseCreate, 
     try:
         # check if selected course can be counted towards whatever is entered
         # Validation Not written yet
+        if new_selected_course.count_towards == "BS":
+            ccid = new_selected_course.course_id
+            cc = db.query(models.Course).filter(models.Course.course_id == )
+        if new_selected_course.count_towards == "HS":
+            pass
+        if new_selected_course.count_towards == "Core":
+            pass
+        if new_selected_course.count_towards == "Ext Core":
+            pass
+
 
         db.add(new_selected_course)
         db.commit()

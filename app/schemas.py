@@ -4,6 +4,13 @@ from datetime import datetime
 
 from pydantic.networks import EmailStr
 
+class CourseTypeGet(BaseModel):
+    id: int
+    count_towards: str
+
+    class Config:
+        orm_mode = True
+
 class CourseGet(BaseModel):
     id: int
     course_id: str

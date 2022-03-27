@@ -35,3 +35,7 @@ async def get_corerel(db: Session = Depends(get_db), current_user: int = Depends
     extcorerels = db.query(models.ExtCoreRel).all()
     return extcorerels
 
+@router.get('/coursetypes', response_model = List[schemas.CourseTypeGet])
+async def get_coursetypes(db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
+    coursetypes = db.query(models.CourseTypes).all()
+    return coursetypes
