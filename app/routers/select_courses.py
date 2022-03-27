@@ -36,7 +36,7 @@ async def create_selected_course(selected_course: schemas.SelectedCourseCreate, 
         # Validation Not written yet
         if new_selected_course.count_towards == "BS":
             ccid = new_selected_course.course_id
-            cc = db.query(models.Course).filter(models.Course.course_id == )
+            # cc = db.query(models.Course).filter(models.Course.course_id == )
         if new_selected_course.count_towards == "HS":
             pass
         if new_selected_course.count_towards == "Core":
