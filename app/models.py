@@ -35,15 +35,15 @@ class CoreRel(Base):
     __tablename__ = "corerel"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    course_id = Column(Integer, ForeignKey("courses.id", ondelete="CASCADE"), nullable=False)
-    major_id = Column(Integer, ForeignKey("programmajor.id", ondelete="CASCADE"), nullable=False)
+    course_id = Column(String, ForeignKey("courses.course_id", ondelete="CASCADE"), nullable=False)
+    major_id = Column(String, ForeignKey("programmajor.major_code", ondelete="CASCADE"), nullable=False)
 
 class ExtCoreRel(Base):
     __tablename__ = "extcorerel"
 
     id = Column(Integer, primary_key=True, nullable=False)
-    course_id = Column(Integer, ForeignKey("courses.id", ondelete="CASCADE"), nullable=False)
-    major_id = Column(Integer, ForeignKey("programmajor.id", ondelete="CASCADE"), nullable=False)
+    course_id = Column(String, ForeignKey("courses.course_id", ondelete="CASCADE"), nullable=False)
+    major_id = Column(String, ForeignKey("programmajor.major_code", ondelete="CASCADE"), nullable=False)
 
 class User(Base):
     __tablename__ = "users"

@@ -23,7 +23,6 @@ async def get_selected_courses(db: Session = Depends(get_db), current_user: int 
 
 @router.post('/', status_code=status.HTTP_201_CREATED, response_model=List[schemas.SelectedCourseGet])
 async def create_selected_course(selected_course: schemas.SelectedCourseCreate, db: Session = Depends(get_db), current_user: int = Depends(oauth2.get_current_user)):
-    # print(selected_course.dict())
     new_selected_course = models.SelectedCourse(**selected_course.dict())
     new_selected_course.user_id = current_user.id
 
@@ -31,20 +30,37 @@ async def create_selected_course(selected_course: schemas.SelectedCourseCreate, 
     if(len(check_already) > 0):
         raise HTTPException(status.HTTP_406_NOT_ACCEPTABLE, detail=f"Course Already Selected")
 
+    ccid = new_selected_course.course_id
+    cc = db.query(models.Course).filter(models.Course.course_id == ccid)
+    major_code = current_user.program_major
+    if cc.first() == None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND,
+        detail=f"Course {ccid} does not exist")
+    
+    # check if selected course can be counted towards whatever is entered
+    # Validation Not written yet
+    if new_selected_course.count_towards == "BS":
+        fetched_course = cc.first()
+        if fetched_course.is_bs == False:
+            raise HTTPException(status.HTTP_406_NOT_ACCEPTABLE,
+            detail="Course cannot count towards BS")
+    if new_selected_course.count_towards == "HS":
+        fetched_course = cc.first()
+        if fetched_course.is_hs == False:
+            raise HTTPException(status.HTTP_406_NOT_ACCEPTABLE,
+            detail="Course cannot count towards HS")
+    if new_selected_course.count_towards == "Core":
+        cc_new = db.query(models.CoreRel).filter(models.CoreRel.major_id == major_code).filter(models.CoreRel.course_id == ccid)
+        if cc_new.first() == None:
+            raise HTTPException(status.HTTP_406_NOT_ACCEPTABLE,
+            detail="Course cannot count towards Core")
+    if new_selected_course.count_towards == "Ext Core":
+        cc_new = db.query(models.ExtCoreRel).filter(models.ExtCoreRel.major_id == major_code).filter(models.ExtCoreRel.course_id == ccid)
+        if cc_new.first() == None:
+            raise HTTPException(status.HTTP_406_NOT_ACCEPTABLE,
+            detail="Course cannot count towards Ext Core")
+
     try:
-        # check if selected course can be counted towards whatever is entered
-        # Validation Not written yet
-        if new_selected_course.count_towards == "BS":
-            ccid = new_selected_course.course_id
-            # cc = db.query(models.Course).filter(models.Course.course_id == )
-        if new_selected_course.count_towards == "HS":
-            pass
-        if new_selected_course.count_towards == "Core":
-            pass
-        if new_selected_course.count_towards == "Ext Core":
-            pass
-
-
         db.add(new_selected_course)
         db.commit()
         db.refresh(new_selected_course)
