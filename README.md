@@ -5,6 +5,7 @@
 The packages required to run this backend project are listed in ```requirements.txt```.
 
 Run the following command to install them all.
+You might want to create a virtual environment and then proceed to install the packages in it.
 
 ```
 pip install -r requirements.txt
@@ -39,8 +40,8 @@ Make sure to configure CORS in order to connect to React or any other frontend.
 
 ---
 
-## Backend Constraints
+## Database Schema
 
-Some constraints are still in progress, and will be updated time to time.
+![Image](./media/schema.png)
 
 ---

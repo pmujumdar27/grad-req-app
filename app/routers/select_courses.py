@@ -2,7 +2,7 @@ from fastapi import Response, status, HTTPException, Depends, APIRouter
 
 from app.database import get_db
 from .. import models, schemas, oauth2
-from typing import Optional, List
+from typing import List
 from sqlalchemy.orm import Session
 
 router = APIRouter(
@@ -38,7 +38,6 @@ async def create_selected_course(selected_course: schemas.SelectedCourseCreate, 
         detail=f"Course {ccid} does not exist")
     
     # check if selected course can be counted towards whatever is entered
-    # Validation Not written yet
     if new_selected_course.count_towards == "BS":
         fetched_course = cc.first()
         if fetched_course.is_bs == False:
